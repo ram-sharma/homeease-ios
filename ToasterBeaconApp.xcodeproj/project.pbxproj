@@ -22,6 +22,10 @@
 		7CF761C619CDFB8400ABC8FC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF761A519CDFB8400ABC8FC /* UIKit.framework */; };
 		7CF761CE19CDFB8400ABC8FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7CF761CC19CDFB8400ABC8FC /* InfoPlist.strings */; };
 		7CF761D019CDFB8400ABC8FC /* ToasterBeaconAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CF761CF19CDFB8400ABC8FC /* ToasterBeaconAppTests.m */; };
+		7CF761DA19CDFBAC00ABC8FC /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF761D919CDFBAC00ABC8FC /* CoreBluetooth.framework */; };
+		7CF761DC19CDFBB400ABC8FC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF761DB19CDFBB400ABC8FC /* CoreLocation.framework */; };
+		7CF761DE19CDFBB900ABC8FC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF761DD19CDFBB900ABC8FC /* SystemConfiguration.framework */; };
+		7CF761E219CDFC1800ABC8FC /* libEstimoteSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF761E119CDFC1800ABC8FC /* libEstimoteSDK.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +59,11 @@
 		7CF761CB19CDFB8400ABC8FC /* ToasterBeaconAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ToasterBeaconAppTests-Info.plist"; sourceTree = "<group>"; };
 		7CF761CD19CDFB8400ABC8FC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7CF761CF19CDFB8400ABC8FC /* ToasterBeaconAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToasterBeaconAppTests.m; sourceTree = "<group>"; };
+		7CF761D919CDFBAC00ABC8FC /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		7CF761DB19CDFBB400ABC8FC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		7CF761DD19CDFBB900ABC8FC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7CF761DF19CDFBD800ABC8FC /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEstimoteSDK.a; path = ../EstimoteSDK/libEstimoteSDK.a; sourceTree = "<group>"; };
+		7CF761E119CDFC1800ABC8FC /* libEstimoteSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libEstimoteSDK.a; path = EstimoteSDK/libEstimoteSDK.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +71,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CF761DC19CDFBB400ABC8FC /* CoreLocation.framework in Frameworks */,
+				7CF761DA19CDFBAC00ABC8FC /* CoreBluetooth.framework in Frameworks */,
+				7CF761DE19CDFBB900ABC8FC /* SystemConfiguration.framework in Frameworks */,
+				7CF761E219CDFC1800ABC8FC /* libEstimoteSDK.a in Frameworks */,
 				7CF761A419CDFB8400ABC8FC /* CoreGraphics.framework in Frameworks */,
 				7CF761A619CDFB8400ABC8FC /* UIKit.framework in Frameworks */,
 				7CF761A219CDFB8400ABC8FC /* Foundation.framework in Frameworks */,
@@ -103,6 +116,11 @@
 		7CF761A019CDFB8400ABC8FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7CF761E119CDFC1800ABC8FC /* libEstimoteSDK.a */,
+				7CF761DF19CDFBD800ABC8FC /* libEstimoteSDK.a */,
+				7CF761DD19CDFBB900ABC8FC /* SystemConfiguration.framework */,
+				7CF761DB19CDFBB400ABC8FC /* CoreLocation.framework */,
+				7CF761D919CDFBAC00ABC8FC /* CoreBluetooth.framework */,
 				7CF761A119CDFB8400ABC8FC /* Foundation.framework */,
 				7CF761A319CDFB8400ABC8FC /* CoreGraphics.framework */,
 				7CF761A519CDFB8400ABC8FC /* UIKit.framework */,
@@ -392,7 +410,17 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ToasterBeaconApp/ToasterBeaconApp-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../EstimoteSDK/Headers",
+				);
 				INFOPLIST_FILE = "ToasterBeaconApp/ToasterBeaconApp-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/ramsharma/Documents/Hackathon/HackTheNorth/ToasterBeaconApp/EstimoteSDK,
+					"$(PROJECT_DIR)/EstimoteSDK",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -405,7 +433,17 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ToasterBeaconApp/ToasterBeaconApp-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../EstimoteSDK/Headers",
+				);
 				INFOPLIST_FILE = "ToasterBeaconApp/ToasterBeaconApp-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/ramsharma/Documents/Hackathon/HackTheNorth/ToasterBeaconApp/EstimoteSDK,
+					"$(PROJECT_DIR)/EstimoteSDK",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
