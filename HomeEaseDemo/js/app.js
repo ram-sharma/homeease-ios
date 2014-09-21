@@ -28,8 +28,36 @@ function Recipe() {
        alert('done');
     }
 	);
+}
+
+function KillM() {
+	data = null;
+	$.get(
+		"http://www.homeease.me/microwave/stop",
+		{paramOne : 1, paramX : 'abc'},
+		function(data) {
+			alert('done');
+		}
+	);
+}
+
+function KillO() {
+	data = null;
 	$.get(
 		"http://www.homeease.me/toasteroven/off",
+		{paramOne : 1, paramX : 'abc'},
+		function(data) {
+			alert('done');
+		}
+	);
+}
+
+
+function MRecipe() {
+	console.log("test");
+	data = null;
+	$.get(
+		"http://www.homeease.me/microwave/cook/zapDemo",
 		{paramOne : 1, paramX : 'abc'},
 		function(data) {
 			alert('done');
