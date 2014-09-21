@@ -14,10 +14,7 @@ app.beaconRegions =
 		minor: 63028
 	}
 ]
-
-// Currently displayed page.
 app.currentPage = 'test'
-
 app.initialize = function()
 {
 	document.addEventListener(
@@ -123,20 +120,13 @@ app.didRangeBeaconsInRegion = function(pluginResult)
 
 app.gotoPage = function(pageId)
 {
-	app.hidePage(app.currentPage)
-	app.showPage(pageId)
-	app.currentPage = pageId
-	
-}
-
-app.showPage = function(pageId)
-{
-	document.getElementById(pageId).style.display = 'block'
-}
-
-app.hidePage = function(pageId)
-{
-	document.getElementById(pageId).style.display = 'none'
+	if(pageId=="oven") {
+		document.getElementById("debug").value = 5;
+		document.getElementById("oven").style.display = 'block';
+	} else {
+		document.getElementById("debug").value = pageId;
+		document.getElementById("oven").style.display = 'none';
+	}
 }
 
 // Set up the application.
