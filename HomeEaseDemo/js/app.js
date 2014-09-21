@@ -1,133 +1,103 @@
-// JavaScript code for the Arduino Beacon example app.
+var beacons = {};
 
-// Application object.
-var app = {}
-
-// Regions that define which page to show for each beacon.
-app.beaconRegions =
-[
-	{
-		id: 'oven',
-		// uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D',
-		uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D',
-		major: 61039,
-		minor: 63028
+function appendTd(root, value, id) {
+	var text = document.createTextNode(value);
+	var td = document.createElement("td");
+	if(id) {
+		td.id = id;
 	}
-]
-app.currentPage = 'test'
-app.initialize = function()
-{
-	document.addEventListener(
-		'deviceready',
-		app.onDeviceReady,
-		false)
-	app.gotoPage(app.currentPage)
+	td.appendChild(text);
+	root.appendChild(td);
 }
 
-// Called when Cordova are plugins initialised,
-// the iBeacon API is now available.
-app.onDeviceReady = function()
-{
-	// Specify a shortcut for the location manager holding the iBeacon functions.
-	window.locationManager = cordova.plugins.locationManager
-
-	// Start tracking beacons!
-	app.startScanForBeacons()
+function hex16(i) {
+	var s = i.toString(16);
+	while(s.length < 4) {
+		s = '0'+s;
+	}
+	return s;
 }
 
-app.startScanForBeacons = function()
-{
-	//console.log('startScanForBeacons')
-
-	// The delegate object contains iBeacon callback functions.
-	var delegate = locationManager.delegate.implement(
-	{
-		didDetermineStateForRegion: function(pluginResult)
+var app = {
+	initialize: function() {
+		// Important to stop scanning when page reloads/closes!
+		window.addEventListener('beforeunload', function(e)
 		{
-			//console.log('didDetermineStateForRegion: ' + JSON.stringify(pluginResult))
-		},
+			//iBeacon.stopScan();
+		});
 
-		didStartMonitoringForRegion: function(pluginResult)
-		{
-			//console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult))
-		},
+		this.bindEvents();
+	},
+	bindEvents: function() {
+		document.addEventListener('deviceready', this.onDeviceReady, false);
+	},
+	onDeviceReady: function() {
+		//console.log('cordova: ' + JSON.stringify(cordova, null, "\t"));
+		window.LocationManager = cordova.plugins.LocationManager;
+		window.locationManager = cordova.plugins.locationManager;
+		window.Regions = locationManager.Regions;
 
-		didRangeBeaconsInRegion: function(pluginResult)
-		{
-			//console.log('didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult))
-			app.didRangeBeaconsInRegion(pluginResult)
+		window.Region = locationManager.Region;
+		window.Delegate = locationManager.Delegate;
+		window.CircularRegion = locationManager.CircularRegion;
+		window.BeaconRegion = locationManager.BeaconRegion;
+		app.startScan();
+	},
+
+	startScan: function() {
+		var regions = [
+			// Add your own manufacturer UUIDs to this list.
+			{uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D'},
+			{uuid:'F7826DA6-4FA2-4E98-8024-BC5B71E0893E'},
+			{uuid:'8DEEFBB9-F738-4297-8040-96668BB44281'},
+			{uuid:'A0B13730-3A9A-11E3-AA6E-0800200C9A66'},
+		]
+
+		var delegate = locationManager.delegate.implement({
+			didDetermineStateForRegion: function (pluginResult) {
+				console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+			},
+
+			didStartMonitoringForRegion: function (pluginResult) {
+				console.log('didStartMonitoringForRegion:', pluginResult);
+			},
+
+			didRangeBeaconsInRegion: function (pluginResult) {
+				//console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
+				var root = document.getElementById("beaconListRoot");
+				for(var index in pluginResult.beacons) {
+					var beacon = pluginResult.beacons[index];
+					var key = 'tx'+beacon.uuid.replace(/-/g,'_') + hex16(beacon.major)+"_"+hex16(beacon.minor);
+					if(beacon.proximity=="ProximityImmediate") {
+						document.getElementById("oven").style.display = 'block';
+					} else {
+						document.getElementById("oven").style.display = 'none';
+					}
+					if(beacons[key] == null) {
+						beacons[key] = beacon;
+						var tr = document.createElement("tr");
+						root.appendChild(tr);
+					} else {
+						var td = document.getElementById(key+'rssi');
+						td.firstChild.nodeValue = beacon.rssi;
+						var td = document.getElementById(key+'prox');
+						td.firstChild.nodeValue = beacon.proximity;
+					}
+				}
+			}
+		});
+		locationManager.setDelegate(delegate);
+
+		for(var i in regions) {
+			var uuid = regions[i].uuid;
+			var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(uuid, uuid, undefined, undefined);
+
+			cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
+				.fail(console.error)
+				.done();
 		}
-	})
-
-	// Set the delegare object to use.
-	locationManager.setDelegate(delegate)
-
-	// Start monitoring and ranging our beacons.
-	for (var r in app.beaconRegions)
-	{
-		var region = app.beaconRegions[r]
-
-		var beaconRegion = new locationManager.BeaconRegion(
-			region.id, region.uuid, region.major, region.minor)
-
-		// Start monitoring.
-		locationManager.startMonitoringForRegion(beaconRegion)
-			.fail(console.error)
-			.done()
-
-		// Start ranging.
-		locationManager.startRangingBeaconsInRegion(beaconRegion)
-			.fail(console.error)
-			.done()
-	}
-}
-
-// Display pages depending of which beacon is close.
-app.didRangeBeaconsInRegion = function(pluginResult)
-{
-	// There must be a beacon within range.
-	if (0 == pluginResult.beacons.length)
-	{
-		return
-	}
-
-	// Our regions are defined so that there is one beacon per region.
-	// Get the first (and only) beacon in range in the region.
-	var beacon = pluginResult.beacons[0]
-
-	// The region identifier is the page id.
-	var pageId = pluginResult.region.identifier
-
-	//console.log('ranged beacon: ' + pageId + ' ' + beacon.proximity)
-
-	// If the beacon is close and represents a new page, then show the page.
-	if ((beacon.proximity == 'ProximityImmediate' || beacon.proximity == 'ProximityNear')
-		&& app.currentPage != pageId)
-	{
-		app.gotoPage(pageId)
-		return
-	}
-
-	// If the beacon represents the current page but is far away,
-	// then show the default page.
-	if ((beacon.proximity == 'ProximityFar' || beacon.proximity == 'ProximityUnknown')
-		&& app.currentPage == pageId)
-	{
-		app.gotoPage('page-default')
-		return
-	}
-}
-
-app.gotoPage = function(pageId)
-{
-	if(pageId=="oven") {
-		document.getElementById("debug").value = 5;
-		document.getElementById("oven").style.display = 'block';
-	} else {
-		document.getElementById("debug").value = pageId;
-		document.getElementById("oven").style.display = 'none';
-	}
-}
+	},
+};
 
 // Set up the application.
 app.initialize()
