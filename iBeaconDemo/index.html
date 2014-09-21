@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes,
+		initial-scale=1.0" />
+
+	<title>Relaxation iBeacons</title>
+
+	<style>
+	@import 'page.css';
+	</style>
+
+	<script>
+	// Redirect console if running from Evothings Workbench.
+	if (window.hyper) { console.log = hyper.log }
+	</script>
+</head>
+
+<body>
+	<div class="my-page" id="page-default">
+		<div class="my-header">
+			<img class="my-header-image" src="photos/photo-default.jpg" />
+			<img class="my-icon-back" src="icon-back.png" ontouchend="history.back()" />
+		</div>
+		<div class="my-content">
+			<h1>Hungry sir?</h1>
+			<p>Please move within range of your oven and tell it what you want. Your wish is the oven's command.</p>
+		</div>
+	</div>
+
+	<div class="my-page" id="page-feet">
+		<div class="my-header">
+			<img class="my-header-image" src="photos/photo-default.jpg" />
+			<img class="my-icon-back" src="icon-back.png" ontouchend="history.back()" />
+		</div>
+		<div class="my-content">
+			<h1>Enter your command, Sir.</h1>
+			<div id="oven-control">
+				<p>Temp: <input type="text" name="temp" /></p>
+				<p>Time: <input type="text" name="time" /></p>
+				<p><input type="button" name="ok" value="OK"  /><p>
+			</div>
+		</div>
+	</div>
+
+	<div class="my-page" id="page-shoulders">
+		<div class="my-header">
+			<img class="my-header-image" src="photos/photo-shoulders-1.jpg" />
+			<img class="my-icon-back" src="icon-back.png" ontouchend="history.back()" />
+		</div>
+		<div class="my-content">
+			<h1>You ran away :( Your oven will now shut off!</h1>
+		</div>
+	</div>
+
+	<div class="my-page" id="page-face">
+		<div class="my-header">
+			<img class="my-header-image" src="photos/photo-face.jpg" />
+			<img class="my-icon-back" src="icon-back.png" ontouchend="history.back()" />
+		</div>
+		<div class="my-content">
+			<h1>Feel Your Face</h1>
+			<ul>
+				<li>Become aware of your face.</li>
+				<li>Feel the forehead.</li>
+				<li>The eyebrows.</li>
+				<li>Eyes.</li>
+				<li>Nose.</li>
+				<li>Nostrils.</li>
+				<li>Air flowing through the nostrils.</li>
+				<li>Cheeks.</li>
+				<li>Jaw.</li>
+				<li>Lips.</li>
+				<li>Tongue.</li>
+				<li>Whole of the head.</li>
+				<li>The space surrounding the head.</li>
+			</ul>
+		</div>
+	</div>
+
+	<script src="lib/jquery.js"></script>
+	<script src="cordova.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
