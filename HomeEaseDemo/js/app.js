@@ -18,6 +18,25 @@ function hex16(i) {
 	return s;
 }
 
+function Recipe() {
+	console.log("test");
+	data = null;
+	$.get(
+    "http://www.homeease.me/toasteroven/broil",
+    {paramOne : 1, paramX : 'abc'},
+    function(data) {
+       alert('done');
+    }
+	);
+	$.get(
+		"http://www.homeease.me/toasteroven/off",
+		{paramOne : 1, paramX : 'abc'},
+		function(data) {
+			alert('done');
+		}
+	);
+}
+
 var app = {
 	initialize: function() {
 		// Important to stop scanning when page reloads/closes!
@@ -47,41 +66,34 @@ var app = {
 	startScan: function() {
 		var regions = [
 			// Add your own manufacturer UUIDs to this list.
-			{uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D'},
-			{uuid:'F7826DA6-4FA2-4E98-8024-BC5B71E0893E'},
-			{uuid:'8DEEFBB9-F738-4297-8040-96668BB44281'},
-			{uuid:'A0B13730-3A9A-11E3-AA6E-0800200C9A66'},
+			{uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D'}
 		]
 
 		var delegate = locationManager.delegate.implement({
 			didDetermineStateForRegion: function (pluginResult) {
-				console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+				// console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
 			},
 
 			didStartMonitoringForRegion: function (pluginResult) {
-				console.log('didStartMonitoringForRegion:', pluginResult);
+				// console.log('didStartMonitoringForRegion:', pluginResult);
 			},
 
 			didRangeBeaconsInRegion: function (pluginResult) {
-				//console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
+				// console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
 				var root = document.getElementById("beaconListRoot");
 				for(var index in pluginResult.beacons) {
 					var beacon = pluginResult.beacons[index];
 					var key = 'tx'+beacon.uuid.replace(/-/g,'_') + hex16(beacon.major)+"_"+hex16(beacon.minor);
-					if(beacon.proximity=="ProximityImmediate") {
+					if(beacon.proximity=="ProximityImmediate" && beacon.major==61039) {
 						document.getElementById("oven").style.display = 'block';
 					} else {
-						document.getElementById("oven").style.display = 'none';
 					}
 					if(beacons[key] == null) {
 						beacons[key] = beacon;
 						var tr = document.createElement("tr");
-						root.appendChild(tr);
 					} else {
 						var td = document.getElementById(key+'rssi');
-						td.firstChild.nodeValue = beacon.rssi;
 						var td = document.getElementById(key+'prox');
-						td.firstChild.nodeValue = beacon.proximity;
 					}
 				}
 			}
